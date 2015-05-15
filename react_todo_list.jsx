@@ -136,6 +136,7 @@ var DoneItem = React.createClass({
 var React_Todo_List = React.createClass({
   getInitialState: function(){
     var tasks = Model.getTasks();
+    //console.log(tasks);
     return {tasks: tasks};
   },
   markAllTaskDone: function(){
@@ -152,7 +153,7 @@ var React_Todo_List = React.createClass({
     });
   },
   addNewTask: function(taskName){
-    var task = {id: "t" + (this.state.tasks.length + 1), taskName: taskName, hasDone: false};
+    var task = {id: "t" + new Date().getTime(), taskName: taskName, hasDone: false};
     var tasks = this.state.tasks;
     tasks.unshift(task);
     this.setState({tasks: tasks}, function(){
@@ -168,6 +169,7 @@ var React_Todo_List = React.createClass({
       }
       return task;
     });
+    //console.log(tasks);
     this.setState({tasks: tasks}, function(){
       //save tasks
       Model.setTasks(tasks);
