@@ -20,7 +20,7 @@ var TaskList = React.createClass({
     var tasks = [];
     this.props.tasks.forEach(function(task){
       if(!task.hasDone){
-        tasks.push(<TaskItem key={task.taskName} task={task} onMarkTaskDone={this.props.onMarkTaskDone} />);
+        tasks.push(<TaskItem key={task.id} task={task} onMarkTaskDone={this.props.onMarkTaskDone} />);
       }
     }.bind(this));
 
@@ -66,6 +66,7 @@ var NewTaskInput = React.createClass({
       var newTask = this.refs.newTask.getDOMNode().value.trim();
       if(newTask) {
         this.props.onAddNewTask(newTask);
+        this.refs.newTask.getDOMNode().value = "";
       }
     }
   },
@@ -107,7 +108,7 @@ var DoneList = React.createClass({
     var doneTasks = [];
     this.props.tasks.forEach(function(task){
       if(task.hasDone) {
-        doneTasks.push(<DoneItem key={task.taskName} task={task} onRemoveDoneTask={this.props.onRemoveDoneTask} />);
+        doneTasks.push(<DoneItem key={task.id} task={task} onRemoveDoneTask={this.props.onRemoveDoneTask} />);
       }
     }.bind(this));
     return (
@@ -132,18 +133,9 @@ var DoneItem = React.createClass({
   }
 });
 
-
-var tasks = [
-  {id: "t1", taskName: "buy mac", hasDone: false},
-  {id: "t2", taskName: "get update", hasDone: false},
-  {id: "t3", taskName: "win a game", hasDone: false},
-  {id: "t4", taskName: "start this project", hasDone: true},
-  {id: "t5", taskName: "have a good day", hasDone: true}
-];
-
-
 var React_Todo_List = React.createClass({
   getInitialState: function(){
+    var tasks = Model.getTasks();
     return {tasks: tasks};
   },
   markAllTaskDone: function(){
@@ -154,13 +146,19 @@ var React_Todo_List = React.createClass({
       task.hasDone = true;
       return task;
     });
-    this.setState({tasks: tasks});
+    this.setState({tasks: tasks}, function(){
+      //save tasks
+      Model.setTasks(tasks);
+    });
   },
   addNewTask: function(taskName){
     var task = {id: "t" + (this.state.tasks.length + 1), taskName: taskName, hasDone: false};
     var tasks = this.state.tasks;
     tasks.unshift(task);
-    this.setState({tasks: tasks});
+    this.setState({tasks: tasks}, function(){
+      //save tasks
+      Model.setTasks(tasks);
+    });
   },
   markTaskDone: function (id) {
     var tasks = this.state.tasks.map(function(task){
@@ -170,7 +168,10 @@ var React_Todo_List = React.createClass({
       }
       return task;
     });
-    this.setState({tasks: tasks});
+    this.setState({tasks: tasks}, function(){
+      //save tasks
+      Model.setTasks(tasks);
+    });
   },
   removeDoneTask: function (id) {
     var removeTaskIndex = "";
@@ -182,7 +183,10 @@ var React_Todo_List = React.createClass({
       }
     });
     tasks.splice(removeTaskIndex, 1);
-    this.setState({tasks: tasks});
+    this.setState({tasks: tasks}, function(){
+      //save tasks
+      Model.setTasks(tasks);
+    });
   },
   render: function(){
     return (
