@@ -1,3 +1,7 @@
-# react_todo_list
+# React Todo List Demo
 
-###use Facebook React create a todo_list application.
+Use Facebook React create a todo list demo.
+
+How to use:
+
+git clone it & setup a http server & open index.html from your http server
