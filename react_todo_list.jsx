@@ -153,7 +153,7 @@ var React_Todo_List = React.createClass({
     });
   },
   addNewTask: function(taskName){
-    var task = {id: "t" + new Date().getTime(), taskName: taskName, hasDone: false};
+    var task = {id: "task" + new Date().getTime(), taskName: taskName, hasDone: false};
     var tasks = this.state.tasks;
     tasks.unshift(task);
     this.setState({tasks: tasks}, function(){
